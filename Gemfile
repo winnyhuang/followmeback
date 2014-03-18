@@ -50,3 +50,4 @@ end
 
 gem 'instagram'
 gem 'quiet_assets', :group => :development
+gem 'pg'
