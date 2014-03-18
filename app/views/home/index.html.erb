@@ -1,0 +1,22 @@
+<% if is_connected %>
+<%#= image_tag @user.profile_picture %>
+Connected as <%= @user.full_name %> - <%= link_to "Logout", action: "logout" %> - Followers (<%= @user.counts.followed_by %>) - Following (<%= @user.counts.follows %>)
+
+<h1>Users that you are following that are not following you back! :(</h1>
+<table>
+	<th>username</th>
+	<th>full name</th>
+	<th></th>
+	<th></th>
+	<% @follows_not_back.each do |follow| %>
+		<tr>
+			<td><%= link_to follow.username, "http://instagram.com/#{follow.username}", target: "_blank" %></td>
+			<td><%= follow.full_name %></td>
+			<td><%= button_to "following", {action: "follow", id: follow.id}, remote: true, id: "following_#{follow.id}", class: "following disabled" %></td>
+			<td><%= button_to "unfollow", {action: "unfollow", id: follow.id}, remote: true, id: "unfollow_#{follow.id}", class: "unfollow" %></td>
+		</tr>
+	<% end %>
+</table>
+<% else %>
+	<%= button_to "Connect with Instagram", {action: "connecting"}, class: "login" %>
+<% end %>
