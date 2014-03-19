@@ -2,7 +2,7 @@
 <%#= image_tag @user.profile_picture %>
 Connected as <%= @user.full_name %> - <%= link_to "Logout", action: "logout" %> - Followers (<%= @user.counts.followed_by %>) - Following (<%= @user.counts.follows %>)
 
-<h1>Users that you are following that are not following you back! :(</h1>
+<h1>The <%= @follows_not_back.size %> Instagram users you are following that are not following you back! :(</h1>
 <table>
 	<th>username</th>
 	<th>full name</th>
