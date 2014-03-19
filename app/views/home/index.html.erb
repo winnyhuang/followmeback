@@ -12,8 +12,9 @@ Connected as <%= @user.full_name %> - <%= link_to "Logout", action: "logout" %> 
 		<tr>
 			<td><%= link_to follow.username, "http://instagram.com/#{follow.username}", target: "_blank" %></td>
 			<td><%= follow.full_name %></td>
-			<td><%= button_to "following", {action: "follow", id: follow.id}, remote: true, id: "following_#{follow.id}", class: "following disabled" %></td>
-			<td><%= button_to "unfollow", {action: "unfollow", id: follow.id}, remote: true, id: "unfollow_#{follow.id}", class: "unfollow" %></td>
+			<td><button id="follow_<%=follow.id%>" data-type="follow" data-id="<%=follow.id%>" class="relationship disabled">following</button></td>
+			<td><button id="unfollow_<%=follow.id%>" data-type="unfollow" data-id="<%=follow.id%>" class="relationship">unfollow</button></td>
+			<td><%= image_tag "loader.gif", id: "loader_#{follow.id}", class: "loader hide" %></td>
 		</tr>
 	<% end %>
 </table>

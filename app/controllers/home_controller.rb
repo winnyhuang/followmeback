@@ -23,15 +23,25 @@ class HomeController < ApplicationController
 		end
 	end
 
-	def unfollow
-		Instagram.unfollow_user(params[:id], access_token: session[:access_token])
-		render nothing: true, status: 200
-		#TODO: handle Instagram errors (like error 400) and return to frontend appropriately 
-	end
-
-	def follow
-		Instagram.follow_user(params[:id], access_token: session[:access_token])
-		render nothing: true, status: 200
+	def relationship
+		begin
+			if params[:type] == "unfollow"
+				response = Instagram.unfollow_user(params[:id], access_token: session[:access_token])
+			elsif params[:type] == "follow"
+				response = Instagram.follow_user(params[:id], access_token: session[:access_token])
+			end
+			render json: {error_message: "Success"}, status: 200
+		rescue Instagram::BadRequest
+			render json: {error_message: "Error 400: You played too much with the API ;)"}, status: 400
+		rescue Instagram::NotFound
+			render json: {error_message: "Error 404: Not found"}, status: 404
+		rescue Instagram::InternalServerError
+			render json: {error_message: "Error 500: Internal server error"}, status: 500
+		rescue Instagram::ServiceUnavailable
+			render json: {error_message: "Error 503: Service unavailable"}, status: 503
+		rescue Exception
+			render json: {error_message: "Unknown error"}, status: 999
+		end
 	end
 
 	def connecting

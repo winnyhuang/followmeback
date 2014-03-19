@@ -3,13 +3,31 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 jQuery ->
-	# improve this and wait for the backend to get Instagram answer to modify any frontend
-	$('.unfollow').click ->
-		id = $(this).attr("id").split('_')[1]
-		$(this).toggleClass("disabled")
-		$('#following_'+id).toggleClass("disabled")
+	$('.relationship').click ->
+		button = $(this)
+		type = $(this).data('type')
+		id = $(this).data('id')
+		loader = $('#loader_'+id)
 
-	$('.following').click ->
-		id = $(this).attr("id").split('_')[1]
-		$(this).toggleClass("disabled")
-		$('#unfollow_'+id).toggleClass("disabled")
+		button.toggleClass('disabled')
+		loader.toggleClass('hide')
+
+		$.ajax '/home/relationship',
+			type: 'POST'
+			dataType: 'json'
+			data:
+				type: type
+				id: id
+			error: (jqXHR) ->
+				console.log jQuery.parseJSON(jqXHR.responseText).error_message
+				alert(jQuery.parseJSON(jqXHR.responseText).error_message)
+				button.toggleClass('disabled')
+				loader.toggleClass('hide')
+			success: (data, textStatus, jqXHR) ->
+				console.log jQuery.parseJSON(jqXHR.responseText).error_message
+				#alert(jQuery.parseJSON(jqXHR.responseText).error_message)
+				if (type == 'follow')
+					$('#unfollow_'+id).toggleClass('disabled')
+				else
+					$('#follow_'+id).toggleClass('disabled')
+				loader.toggleClass('hide')

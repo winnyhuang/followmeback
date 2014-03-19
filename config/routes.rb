@@ -6,8 +6,9 @@ Followmeback::Application.routes.draw do
   get 'oauth/callback' => 'home#callback'
   get 'home/logout' => 'home#logout'
   get 'logout' => 'home#logout'
-  post 'home/unfollow' => 'home#unfollow'
-  post 'home/follow' => 'home#follow'
+
+  get 'home/relationship' => 'home#relationship'
+  post 'home/relationship' => 'home#relationship'
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
