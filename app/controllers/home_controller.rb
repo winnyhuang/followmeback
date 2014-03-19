@@ -24,13 +24,13 @@ class HomeController < ApplicationController
 	end
 
 	def unfollow
-		Instagram.unfollow_user(access_token: session[:access_token], options: params[:id])
+		Instagram.unfollow_user(params[:id], access_token: session[:access_token])
 		render nothing: true, status: 200
 		#TODO: handle Instagram errors (like error 400) and return to frontend appropriately 
 	end
 
 	def follow
-		Instagram.follow_user(access_token: session[:access_token], options: params[:id])
+		Instagram.follow_user(params[:id], access_token: session[:access_token])
 		render nothing: true, status: 200
 	end
 
