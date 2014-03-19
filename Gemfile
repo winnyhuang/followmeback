@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 ruby '2.0.0'
 
-gem 'rails_12factor'
+gem 'rails_12factor', :group => :production
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.0.1'
@@ -51,3 +51,4 @@ end
 gem 'instagram'
 gem 'quiet_assets', :group => :development
 gem 'pg'
+gem 'figaro'
