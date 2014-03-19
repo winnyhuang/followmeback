@@ -1,11 +1,11 @@
 class HomeController < ApplicationController
 	def index
-		if session[:connected]
-			client = Instagram.client
+		if session[:access_token]
+			client = Instagram.client(access_token: session[:access_token])
 			@user = client.user
 
-			follows = Instagram.user_follows(:count => -1)
-			followers = Instagram.user_followed_by(:count => -1)
+			follows = Instagram.user_follows(access_token: session[:access_token], count: -1)
+			followers = Instagram.user_followed_by(access_token: session[:access_token], count: -1)
 
 			@follows_not_back = []
 			follows.each do |follow|
@@ -24,31 +24,28 @@ class HomeController < ApplicationController
 	end
 
 	def unfollow
-		Instagram.unfollow_user(params[:id])
+		Instagram.unfollow_user(access_token: session[:access_token], options: params[:id])
 		render nothing: true, status: 200
 		#TODO: handle Instagram errors (like error 400) and return to frontend appropriately 
 	end
 
 	def follow
-		Instagram.follow_user(params[:id])
+		Instagram.follow_user(access_token: session[:access_token], options: params[:id])
 		render nothing: true, status: 200
 	end
 
 	def connecting
-		redirect_to Instagram.authorize_url(:redirect_uri => CALLBACK_URL, :scope => "relationships")
+		redirect_to Instagram.authorize_url(redirect_uri: CALLBACK_URL, scope: "relationships")
 	end
 
 	def callback
-		response = Instagram.get_access_token(params[:code], :redirect_uri => CALLBACK_URL)
-		Instagram.configure do |config|
-			session[:connected] = true
-			config.access_token = response.access_token
-		end
+		response = Instagram.get_access_token(params[:code], redirect_uri: CALLBACK_URL)
+		session[:access_token] = response.access_token
 		redirect_to :root
 	end
 
 	def logout
-		session[:connected] = false
+		session[:access_token] = nil
 		redirect_to :root
 	end
 end
